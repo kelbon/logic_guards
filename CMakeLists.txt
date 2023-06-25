@@ -9,7 +9,7 @@ endif()
 
 option(${PROJECT_NAME}_BUILD_TESTING "builds and enables testing" ${IS_TOPLEVEL_PROJECT})
 
-file(GLOB ${PROJECT_NAME}_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}/*.hpp")
+set(${PROJECT_NAME}_HEADERS "include/${PROJECT_NAME}/${PROJECT_NAME}.hpp")
 
 ### ${PROJECT_NAME}lib ###
 
