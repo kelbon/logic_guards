@@ -22,7 +22,7 @@ T* usage_example2() {
 
   // here we show that 'dangerous' operations are completed
   // and we dont need free memory on exit
-  free_memory.success_point();
+  free_memory.no_longer_needed();
   return p;
 }
 
