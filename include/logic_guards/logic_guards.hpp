@@ -35,19 +35,15 @@ scope_exit(T&&) -> scope_exit<std::decay_t<T>>;
 // invokes 'Foo' when destroyed and success point not reached
 // success point setted by invoking .no_longer_needed()
 template <typename Foo>
-struct [[nodiscard("name it and set success points")]] on_scope_failure {
+struct [[nodiscard("name it and set success points")]] scope_failure {
   [[no_unique_address]] Foo fn;
   bool failed = true;
-
-  template <typename... Args>
-  constexpr on_scope_failure(Args && ... args) : fn(std::forward<Args>(args)...), failed(true) {
-  }
 
   template <typename T>
   void operator=(T&&) = delete;
 
   LOGIC_GUARDS_CONSTEXPR_DCTOR
-  ~on_scope_failure() noexcept(noexcept(fn())) {
+  ~scope_failure() noexcept(noexcept(fn())) {
     if (failed)
       fn();
   }
@@ -57,19 +53,23 @@ struct [[nodiscard("name it and set success points")]] on_scope_failure {
   }
 };
 template <typename T>
-on_scope_failure(T&&) -> on_scope_failure<std::decay_t<T>>;
+scope_failure(T&&) -> scope_failure<std::decay_t<T>>;
 
 }  // namespace aa
 
-// MACRO on_scope_exit for easy usage
+// MACROS on_scope_exit / on_scope_failure(NAME) for easy usage
 
 namespace aa::noexport {
 
 // used only in macro
-struct make_scope_exit {
+struct maker {
   template <typename T>
   constexpr auto operator+(T&& fn) const noexcept(std::is_nothrow_constructible_v<T, T&&>) {
     return scope_exit{std::forward<T>(fn)};
+  }
+  template <typename T>
+  constexpr auto operator-(T&& fn) const noexcept(std::is_nothrow_constructible_v<T, T&&>) {
+    return scope_failure{std::forward<T>(fn)};
   }
 };
 
@@ -77,7 +77,8 @@ struct make_scope_exit {
 
 #define on_scope_exit                                                                  \
   [[maybe_unused]] const auto LOGIC_GUARDS_CONCAT(scope_exit, __LINE__, __COUNTER__) = \
-      ::aa::noexport::make_scope_exit{} + [&]()
+      ::aa::noexport::maker{} + [&]()
+#define on_scope_failure(NAME) auto NAME = ::aa::noexport::maker{} - [&]()
 
 #define LOGIC_GUARDS_CONCAT_IMPL_EXPAND(a, b, c) a##_##b##_##c
 #define LOGIC_GUARDS_CONCAT_IMPL(a, b, c) LOGIC_GUARDS_CONCAT_IMPL_EXPAND(a, b, c)

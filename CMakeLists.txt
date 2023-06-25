@@ -17,10 +17,6 @@ set_target_properties(${PROJECT_NAME}lib PROPERTIES
 	CMAKE_CXX_STANDARD_REQUIRED ON
 	CXX_STANDARD 20)
 
-### visual ###
-
-source_group(Include FILES ${${PROJECT_NAME}_HEADERS})
-
 ### tests ###
 
 if(${PROJECT_NAME}_ENABLE_TESTING)

@@ -15,7 +15,7 @@ auto usage_example1() {
 
 T* usage_example2() {
   T* p = new T;
-  aa::on_scope_failure free_memory = [&] {
+  on_scope_failure(free_memory) {
     delete p;
   };
   // ...
