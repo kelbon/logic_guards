@@ -13,7 +13,7 @@ void f() {
 
 int main() {
   on_scope_exit {
-    if (!b<0> || !b<1> || !b<4> || !b<5> || b<6>)
+    if (!b<0> || !b<1> || !b<4> || !b<5> || !b<6>)
       exit(3);
   };
   on_scope_exit {

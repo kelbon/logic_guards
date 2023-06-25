@@ -31,16 +31,16 @@ struct [[nodiscard("name it")]] scope_exit {
 template <typename T>
 scope_exit(T&&) -> scope_exit<std::decay_t<T>>;
 
-// SCOPE FAILURE
+// ON SCOPE FAILURE
 // invokes 'Foo' when destroyed and success point not reached
 // success point setted by invoking .success_point()
 template <typename Foo>
-struct [[nodiscard("name it and set success point")]] on_scope_failure {
+struct [[nodiscard("name it and set success points")]] on_scope_failure {
   [[no_unique_address]] Foo fn;
   bool failed = true;
 
   template <typename... Args>
-  constexpr on_scope_failure(Args && ... args) : failed(true), fn(std::forward<Args>(args)...) {
+  constexpr on_scope_failure(Args && ... args) : fn(std::forward<Args>(args)...), failed(true) {
   }
 
   template <typename T>
