@@ -61,6 +61,8 @@ on_scope_failure(T&&) -> on_scope_failure<std::decay_t<T>>;
 
 }  // namespace aa
 
+// MACRO on_scope_exit for easy usage
+
 namespace aa::noexport {
 
 // used only in macro
