@@ -7,7 +7,7 @@ else()
   set(IS_TOPLEVEL_PROJECT FALSE)
 endif()
 
-option(${PROJECT_NAME}_ENABLE_TESTING "enables testing" ${IS_TOPLEVEL_PROJECT})
+option(${PROJECT_NAME}_BUILD_TESTING "builds and enables testing" ${IS_TOPLEVEL_PROJECT})
 
 file(GLOB ${PROJECT_NAME}_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}/*.hpp")
 
@@ -25,7 +25,7 @@ set_target_properties(${PROJECT_NAME}lib PROPERTIES
 
 ### tests ###
 
-if(${PROJECT_NAME}_ENABLE_TESTING)
-  include(CTest)
+include(CTest)
+if(BUILD_TESTING AND ${PROJECT_NAME}_BUILD_TESTING)
   add_subdirectory(tests)
 endif()
