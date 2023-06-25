@@ -11,4 +11,4 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 
 set(${PROJECT_NAME}_TESTS test_logic_guards.cpp)
-source_group(Tests FILES ${${PROJECT_NAME}_TESTS})
+source_group(tests FILES ${${PROJECT_NAME}_TESTS})
