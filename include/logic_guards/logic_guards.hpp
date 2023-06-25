@@ -33,7 +33,7 @@ scope_exit(T&&) -> scope_exit<std::decay_t<T>>;
 
 // ON SCOPE FAILURE
 // invokes 'Foo' when destroyed and success point not reached
-// success point setted by invoking .success_point()
+// success point setted by invoking .no_longer_needed()
 template <typename Foo>
 struct [[nodiscard("name it and set success points")]] on_scope_failure {
   [[no_unique_address]] Foo fn;
@@ -52,7 +52,7 @@ struct [[nodiscard("name it and set success points")]] on_scope_failure {
       fn();
   }
   // should be called where the 'fn' call is no longer needed
-  constexpr void success_point() noexcept {
+  constexpr void no_longer_needed() noexcept {
     failed = false;
   }
 };

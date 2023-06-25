@@ -32,7 +32,7 @@ int main() {
     return 1;
   {
     aa::on_scope_failure set_bool = [] { f<3>(); };
-    set_bool.success_point();
+    set_bool.no_longer_needed();
   }
   if (b<3>)
     return 2;
