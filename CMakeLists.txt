@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.21)
 project(logic_guards LANGUAGES CXX)
 
-option(${PROJECT_NAME}_ENABLE_TESTING "enables testing" OFF)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  set(IS_TOPLEVEL_PROJECT TRUE)
+else()
+  set(IS_TOPLEVEL_PROJECT FALSE)
+endif()
+
+option(${PROJECT_NAME}_ENABLE_TESTING "enables testing" ${IS_TOPLEVEL_PROJECT})
 
 file(GLOB ${PROJECT_NAME}_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}/*.hpp")
 
