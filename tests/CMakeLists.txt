@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.21)
 
 add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/test_${PROJECT_NAME}.cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${PROJECT_NAME}lib)
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../examples)
 add_test(NAME test_${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 set_target_properties(${PROJECT_NAME} PROPERTIES
   CMAKE_CXX_EXTENSIONS OFF

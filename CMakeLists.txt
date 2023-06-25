@@ -11,11 +11,15 @@ option(${PROJECT_NAME}_BUILD_TESTING "builds and enables testing" ${IS_TOPLEVEL_
 
 set(${PROJECT_NAME}_HEADERS "include/${PROJECT_NAME}/${PROJECT_NAME}.hpp")
 
+include(GNUInstallDirs)
+
 ### ${PROJECT_NAME}lib ###
 
 add_library(${PROJECT_NAME}lib INTERFACE "${${PROJECT_NAME}_HEADERS}")
 
-target_include_directories(${PROJECT_NAME}lib INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_include_directories(${PROJECT_NAME}lib INTERFACE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 set_target_properties(${PROJECT_NAME}lib PROPERTIES
   CMAKE_CXX_EXTENSIONS OFF
