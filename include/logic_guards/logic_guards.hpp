@@ -14,6 +14,10 @@
 #define LOGIC_GUARDS_CONSTEXPR_DCTOR
 #endif
 
+// both scope_exit and scope_failure use precondition,
+// that invoking 'fn' do not dellocates memory where 'scope_exit/failure' exists
+// or atleast do not touch memory after deleting(including lambda capture/references to other objects)
+
 namespace aa {
 
 // SCOPE EXIT
@@ -25,7 +29,7 @@ struct [[nodiscard("name it")]] scope_exit {
 
   LOGIC_GUARDS_CONSTEXPR_DCTOR
   ~scope_exit() noexcept(noexcept(fn())) {
-    fn();
+    (void)fn();
   }
 };
 template <typename T>
@@ -39,17 +43,20 @@ struct [[nodiscard("name it and set success points")]] scope_failure {
   [[no_unique_address]] Foo fn;
   bool failed = true;
 
-  template <typename T>
-  void operator=(T&&) = delete;
+  void operator=(scope_failure&&) = delete;
 
   LOGIC_GUARDS_CONSTEXPR_DCTOR
   ~scope_failure() noexcept(noexcept(fn())) {
     if (failed)
-      fn();
+      (void)fn();
   }
   // should be called where the 'fn' call is no longer needed
   constexpr void no_longer_needed() noexcept {
     failed = false;
+  }
+  constexpr void use_and_forget() noexcept(noexcept(fn())) {
+    failed = false;
+    (void)fn();
   }
 };
 template <typename T>
@@ -64,11 +71,11 @@ namespace aa::noexport {
 // used only in macro
 struct maker {
   template <typename T>
-  constexpr auto operator+(T&& fn) const noexcept(std::is_nothrow_constructible_v<T, T&&>) {
+  constexpr auto operator+(T&& fn) const noexcept(std::is_nothrow_constructible_v<std::decay_t<T>, T&&>) {
     return scope_exit{std::forward<T>(fn)};
   }
   template <typename T>
-  constexpr auto operator-(T&& fn) const noexcept(std::is_nothrow_constructible_v<T, T&&>) {
+  constexpr auto operator-(T&& fn) const noexcept(std::is_nothrow_constructible_v<std::decay_t<T>, T&&>) {
     return scope_failure{std::forward<T>(fn)};
   }
 };
