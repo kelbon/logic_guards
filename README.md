@@ -5,6 +5,8 @@ Usage:
 
 ```C++
 
+#include <zal/zal.hpp>
+
 auto usage_example1() {
   T* p = new T;
   on_scope_exit {
