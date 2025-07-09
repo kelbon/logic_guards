@@ -1,5 +1,5 @@
 
-#include "logic_guards/logic_guards.hpp"
+#include <zal/zal.hpp>
 
 #include <mutex>
 #include <vector>
@@ -26,20 +26,24 @@ int main() {
     f<1>();
   };
   {
-    on_scope_failure(set_bool) { f<2>(); };
+    on_scope_failure(set_bool) {
+      f<2>();
+    };
   }
   if (!b<2>)
     return 1;
   {
-    on_scope_failure(set_bool) { f<3>(); };
+    on_scope_failure(set_bool) {
+      f<3>();
+    };
     set_bool.no_longer_needed();
   }
   if (b<3>)
     return 2;
-  aa::scope_exit no_move{[m = std::mutex()] { f<4>(); }};
-  aa::scope_exit from_fn{&f<5>};
-  aa::scope_exit from_fn_ref{f<6>};
-  std::vector<aa::scope_exit<std::function<void()>>> wtf{
+  zal::scope_exit no_move{[m = std::mutex()] { f<4>(); }};
+  zal::scope_exit from_fn{&f<5>};
+  zal::scope_exit from_fn_ref{f<6>};
+  std::vector<zal::scope_exit<std::function<void()>>> wtf{
       {&f<7>},
       {f<8>},
       {[] {}},

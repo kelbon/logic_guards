@@ -6,7 +6,6 @@ jobs:
   build:
     strategy:
       matrix:
-        project_name: [logic_guards]
         os: [ubuntu-22.04]
         compiler: [g++-12, clang++-14]
         cpp_standard: [20]
@@ -23,7 +22,7 @@ jobs:
           sudo ln -sf /usr/local/bin/ld /usr/bin/lld
       - name: Configure CMake
         run: |
-          cmake . -D${{matrix.project_name}}_ENABLE_TESTING=ON              \
+          cmake . -DZAL_ENABLE_TESTING=ON              \
             -DCMAKE_BUILD_TYPE=${{matrix.build_type}} \
             -DCMAKE_CXX_COMPILER=${{matrix.compiler}} \
             -DCMAKE_CXX_STANDARD=${{matrix.cpp_standard}}   \
